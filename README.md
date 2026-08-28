@@ -1,93 +1,72 @@
 # Application Bruitage — Soundboard Android
 
-Application Android native de gestion de bruitages conçue pour être utilisée sur la caisse d'un manège forain.
+Prototype d'application Android de gestion de bruitages destiné à être utilisé sur la caisse d'un manège forain.
 
-> 🎵 Projet personnel — application métier
+> 🧪 Prototype expérimental — généré avec assistance IA — non testé en conditions réelles
 
 ## Le projet
 
-Cette application a été conçue pour disposer d'un **soundboard simple, rapide et entièrement hors ligne** sur tablette Android.
+Cette application est née d'un besoin concret : disposer sur une tablette Android d'un soundboard simple permettant de déclencher différents bruitages depuis la caisse d'un manège forain.
 
-L'objectif est de pouvoir déclencher facilement différents bruitages depuis la caisse d'un manège, sans dépendre d'une connexion Internet ni d'un service externe.
+L'application doit pouvoir fonctionner entièrement hors ligne et proposer une interface tactile simple, adaptée à une utilisation rapide pendant l'exploitation du manège.
 
-L'interface repose sur une grille de boutons tactiles entièrement configurables afin de pouvoir adapter les sons et leur comportement directement depuis la tablette.
+Le projet a été réalisé pour répondre à un besoin de mon frère et constitue avant tout une expérimentation autour de la création rapide d'un outil sur mesure.
 
-## Fonctionnalités
+## Fonctionnalités prévues
 
-* Grille de 16 boutons tactiles
-* Lecture instantanée des bruitages
-* Arrêt et redémarrage d'un son déjà en cours
-* Lecture en boucle configurable
-* Bouton permettant d'arrêter tous les sons
-* Configuration individuelle de chaque bouton
-* Choix du fichier audio associé
-* Personnalisation du nom
-* Personnalisation de la couleur
-* Réglage du volume
-* Fondu à l'entrée configurable
-* Persistance de la configuration après redémarrage de l'application
-
-La configuration d'un bouton est accessible directement depuis l'interface par un appui long.
-
-## Fonctionnement hors ligne
-
-L'application est conçue pour fonctionner **entièrement hors ligne**.
-
-Les fichiers audio sont directement embarqués dans l'APK et aucune connexion Internet n'est nécessaire pour utiliser l'application.
-
-Aucune permission réseau n'est demandée.
-
-Ce choix permet notamment de garantir son fonctionnement sur un manège, y compris lorsque la connexion mobile ou Wi-Fi est inexistante ou instable.
-
-## Stockage de la configuration
-
-Les paramètres personnalisés des différents boutons sont enregistrés localement sur la tablette avec **DataStore**.
-
-La configuration est ainsi conservée après la fermeture ou le redémarrage de l'application.
+- Grille de 16 boutons tactiles
+- Lecture de bruitages
+- Arrêt et redémarrage des sons
+- Lecture en boucle configurable
+- Arrêt de tous les sons
+- Configuration individuelle des boutons
+- Choix du fichier audio
+- Personnalisation du nom et de la couleur
+- Réglage du volume
+- Fondu d'entrée configurable
+- Sauvegarde locale de la configuration
+- Fonctionnement entièrement hors ligne
 
 ## Stack technique
 
-* Kotlin
-* Android natif
-* Jetpack Compose
-* Android DataStore
-* Gradle
-* Git
-* GitHub Actions
+Le code généré repose notamment sur :
 
-## Génération de l'APK
+- Kotlin
+- Android natif
+- Jetpack Compose
+- Android DataStore
+- Gradle
+- GitHub Actions
 
-Le dépôt utilise **GitHub Actions** pour automatiser la compilation de l'application.
+> Ces technologies ne font pas partie de mes compétences actuelles en développement. Je ne me présente pas comme développeuse Kotlin / Android sur la base de ce projet.
 
-À chaque `push` sur la branche principale, un workflow génère automatiquement un APK pouvant ensuite être installé manuellement sur les tablettes Android.
+## Utilisation de l'intelligence artificielle
 
-Cette solution permet de produire les nouvelles versions de l'application sans dépendre d'une publication sur le Google Play Store.
+Le code de cette application a été **entièrement généré avec l'assistance d'une intelligence artificielle**.
 
-## Distribution
+Je ne maîtrise pas Kotlin ni Jetpack Compose et ce projet ne doit donc pas être considéré comme une démonstration de compétences techniques dans ces technologies.
 
-L'application est destinée à un usage privé et n'est pas distribuée sur le Google Play Store.
+Mon rôle dans ce projet a consisté à définir le besoin, les fonctionnalités attendues et les contraintes d'utilisation, puis à utiliser l'IA pour produire une première solution correspondant à ce cahier des charges.
 
-L'APK est installé directement sur les tablettes utilisées avec le manège.
+L'objectif est d'expérimenter une approche permettant de répondre rapidement à un besoin concret avec une technologie que je ne connais pas.
 
-## Développement assisté par IA
+## Validation
 
-Cette application a été développée avec l'assistance d'outils d'intelligence artificielle.
+⚠️ **L'application n'a pas encore été testée en conditions réelles.**
 
-L'IA a été utilisée comme outil d'aide à la conception et à l'implémentation, notamment parce que le développement Android natif avec Kotlin et Jetpack Compose ne fait pas partie de mes technologies principales.
+Le fonctionnement décrit dans ce README correspond au comportement attendu de la version actuelle. Il reste à vérifier sur une tablette Android avant de pouvoir considérer l'application comme fonctionnelle.
 
-Le besoin, le fonctionnement attendu et les choix fonctionnels de l'application proviennent d'un **besoin concret rencontré sur le terrain**.
-
-Ce projet m'a permis d'expérimenter le développement Android et la génération automatisée d'APK tout en réalisant un outil destiné à une utilisation réelle.
-
-## Évolutions envisagées
-
-* Validation du fonctionnement avec un ensemble complet de bruitages
-* Amélioration de l'identité visuelle de l'application
-* Ajout éventuel d'un système d'activation par tablette
-* Ajustement de l'interface en fonction des retours lors de l'utilisation réelle
+Les éventuels problèmes rencontrés lors des tests serviront à faire évoluer le prototype.
 
 ## Statut
 
-🚧 **Projet fonctionnel — en cours d'amélioration**
+🧪 **Prototype — en attente de tests**
 
-La première version fonctionnelle de l'application est disponible et les prochaines évolutions seront principalement guidées par son utilisation en conditions réelles.
+Prochaines étapes :
+
+- Installation de l'APK sur la tablette cible
+- Tests des différents bruitages
+- Vérification du fonctionnement hors ligne
+- Validation de la persistance de la configuration
+- Tests en situation réelle sur le manège
+- Corrections et ajustements selon les résultats
