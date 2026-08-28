@@ -1,82 +1,93 @@
-# Bruitage
+# Application Bruitage — Soundboard Android
 
-Appli Android native (Kotlin + Jetpack Compose) de bruitage pour caisse de manège forain.
-Fonctionne 100% hors-ligne, distribution en APK sideloadé (pas de Google Play).
+Application Android native de gestion de bruitages conçue pour être utilisée sur la caisse d'un manège forain.
 
-## État actuel du projet
+> 🎵 Projet personnel — application métier
 
-Squelette v1 fonctionnel généré :
+## Le projet
 
-- Grille de 16 carrés tactiles (4x4)
-- Appui simple = joue le son associé (retrigger si déjà en cours pour un son non-boucle ;
-  ré-appui = stop si le son est en boucle)
-- Appui long = configuration du carré : choix du son (parmi les fichiers embarqués dans
-  `app/src/main/assets/sounds/`), nom, lecture en boucle, fondu à l'entrée, volume, couleur
-- Bouton flottant "Tout arrêter"
-- Configuration persistée localement sur la tablette (DataStore), donc conservée après
-  redémarrage de l'appli
-- Aucune permission réseau demandée (l'appli n'a pas besoin d'internet)
+Cette application a été conçue pour disposer d'un **soundboard simple, rapide et entièrement hors ligne** sur tablette Android.
 
-Non fait pour l'instant (volontairement, cf. échanges avec Claude) :
+L'objectif est de pouvoir déclencher facilement différents bruitages depuis la caisse d'un manège, sans dépendre d'une connexion Internet ni d'un service externe.
 
-- Protection anti-partage de l'APK (code d'activation / device ID) — à ajouter dans un
-  second temps une fois l'appli fonctionnelle validée
-- Icône de lancement définitive (un placeholder simple est en place, à remplacer par un
-  vrai visuel de marque plus tard)
+L'interface repose sur une grille de boutons tactiles entièrement configurables afin de pouvoir adapter les sons et leur comportement directement depuis la tablette.
 
-## Où mettre les sons
+## Fonctionnalités
 
-Deux dossiers "audio" existent dans ce repo, ils n'ont pas le même rôle :
+* Grille de 16 boutons tactiles
+* Lecture instantanée des bruitages
+* Arrêt et redémarrage d'un son déjà en cours
+* Lecture en boucle configurable
+* Bouton permettant d'arrêter tous les sons
+* Configuration individuelle de chaque bouton
+* Choix du fichier audio associé
+* Personnalisation du nom
+* Personnalisation de la couleur
+* Réglage du volume
+* Fondu à l'entrée configurable
+* Persistance de la configuration après redémarrage de l'application
 
-- `Fichiers audio/` (à la racine) : dossier de travail pour stocker/trier tes fichiers
-  sources bruts, non lu par l'appli.
-- `app/src/main/assets/sounds/` : dossier réellement embarqué dans l'APK. C'est ici qu'il
-  faut copier les `.mp3` / `.wav` définitifs avant de compiler, pour qu'ils apparaissent
-  dans le sélecteur de son (appui long sur un carré).
+La configuration d'un bouton est accessible directement depuis l'interface par un appui long.
 
-## Compiler l'APK sans rien installer sur ce PC (build cloud)
+## Fonctionnement hors ligne
 
-Le dépôt contient un workflow GitHub Actions (`.github/workflows/build-apk.yml`) qui
-compile l'APK automatiquement dans le cloud à chaque `push` sur la branche `main`. Rien à
-installer localement à part Git (déjà présent via Laragon).
+L'application est conçue pour fonctionner **entièrement hors ligne**.
 
-Étapes (une seule fois) :
+Les fichiers audio sont directement embarqués dans l'APK et aucune connexion Internet n'est nécessaire pour utiliser l'application.
 
-1. Créer un compte GitHub si besoin : https://github.com/signup (gratuit)
-2. Créer un nouveau dépôt **privé** vide sur GitHub (ne pas cocher "Add a README") :
-   https://github.com/new
-3. Lier ce dossier local au dépôt distant et pousser le code (remplacer l'URL par celle de
-   ton dépôt) :
+Aucune permission réseau n'est demandée.
 
-```bash
-git remote add origin https://github.com/<ton-compte>/<ton-repo>.git
-git branch -M main
-git push -u origin main
-```
+Ce choix permet notamment de garantir son fonctionnement sur un manège, y compris lorsque la connexion mobile ou Wi-Fi est inexistante ou instable.
 
-4. Aller dans l'onglet **Actions** du dépôt GitHub : le build se lance automatiquement et
-   prend 2-3 minutes.
-5. Une fois terminé, ouvrir le run et télécharger l'artifact `bruitage-debug-apk` (fichier
-   zip contenant l'APK).
-6. Transférer cet APK sur chaque tablette (câble USB, ou stockage externe) et l'installer en
-   autorisant "Sources inconnues" dans les paramètres Android.
+## Stockage de la configuration
 
-Pour relancer un build après modification (ex: nouveaux sons ajoutés) :
+Les paramètres personnalisés des différents boutons sont enregistrés localement sur la tablette avec **DataStore**.
 
-```bash
-git add -A
-git commit -m "Ajout des sons"
-git push
-```
+La configuration est ainsi conservée après la fermeture ou le redémarrage de l'application.
 
-Le workflow se redéclenche automatiquement et un nouvel APK est généré.
+## Stack technique
 
-## Prochaines étapes suggérées
+* Kotlin
+* Android natif
+* Jetpack Compose
+* Android DataStore
+* Gradle
+* Git
+* GitHub Actions
 
-- Valider le nombre de carrés par défaut (16 actuellement, modifiable via `GRID_SIZE` dans
-  `SoundBoardViewModel.kt`)
-- Ajouter la protection anti-partage (code d'activation par tablette, saisi au premier
-  lancement)
-- Remplacer l'icône de lancement placeholder par un vrai visuel
-- Ajouter un vrai jeu de sons de test dans `app/src/main/assets/sounds/` pour valider le
-  fonctionnement de bout en bout
+## Génération de l'APK
+
+Le dépôt utilise **GitHub Actions** pour automatiser la compilation de l'application.
+
+À chaque `push` sur la branche principale, un workflow génère automatiquement un APK pouvant ensuite être installé manuellement sur les tablettes Android.
+
+Cette solution permet de produire les nouvelles versions de l'application sans dépendre d'une publication sur le Google Play Store.
+
+## Distribution
+
+L'application est destinée à un usage privé et n'est pas distribuée sur le Google Play Store.
+
+L'APK est installé directement sur les tablettes utilisées avec le manège.
+
+## Développement assisté par IA
+
+Cette application a été développée avec l'assistance d'outils d'intelligence artificielle.
+
+L'IA a été utilisée comme outil d'aide à la conception et à l'implémentation, notamment parce que le développement Android natif avec Kotlin et Jetpack Compose ne fait pas partie de mes technologies principales.
+
+Le besoin, le fonctionnement attendu et les choix fonctionnels de l'application proviennent d'un **besoin concret rencontré sur le terrain**.
+
+Ce projet m'a permis d'expérimenter le développement Android et la génération automatisée d'APK tout en réalisant un outil destiné à une utilisation réelle.
+
+## Évolutions envisagées
+
+* Validation du fonctionnement avec un ensemble complet de bruitages
+* Amélioration de l'identité visuelle de l'application
+* Ajout éventuel d'un système d'activation par tablette
+* Ajustement de l'interface en fonction des retours lors de l'utilisation réelle
+
+## Statut
+
+🚧 **Projet fonctionnel — en cours d'amélioration**
+
+La première version fonctionnelle de l'application est disponible et les prochaines évolutions seront principalement guidées par son utilisation en conditions réelles.
