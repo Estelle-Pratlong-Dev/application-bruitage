@@ -1,5 +1,8 @@
 package com.bruitage.app.ui
 
+import android.media.MediaPlayer
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,18 +15,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FolderOpen
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,13 +44,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.bruitage.app.data.DEFAULT_PALETTE
+import com.bruitage.app.data.SoundLibrary
 import com.bruitage.app.model.SoundButtonConfig
 
-private val PRESET_COLORS = listOf(
-    "#2E86AB", "#A23B72", "#F18F01", "#C73E1D",
-    "#3B1F2B", "#5B8C5A", "#1B998B", "#6247AA"
-)
+private val PRESET_COLORS = DEFAULT_PALETTE
 
 @Composable
 fun EditButtonDialog(
@@ -48,12 +60,65 @@ fun EditButtonDialog(
     onSave: (SoundButtonConfig) -> Unit,
     onClear: () -> Unit
 ) {
+    val context = LocalContext.current
+
     var name by remember(config.index) { mutableStateOf(config.name) }
     var selectedSound by remember(config.index) { mutableStateOf(config.soundFile) }
+    var soundsList by remember(config.index) { mutableStateOf(availableSounds) }
     var loop by remember(config.index) { mutableStateOf(config.loop) }
     var fade by remember(config.index) { mutableStateOf(config.fade) }
     var volume by remember(config.index) { mutableFloatStateOf(config.volume) }
     var colorHex by remember(config.index) { mutableStateOf(config.colorHex) }
+
+    var previewingSound by remember { mutableStateOf<String?>(null) }
+    val previewPlayerHolder = remember { arrayOfNulls<MediaPlayer>(1) }
+
+    fun stopPreview() {
+        previewPlayerHolder[0]?.apply {
+            runCatching { stop() }
+            release()
+        }
+        previewPlayerHolder[0] = null
+        previewingSound = null
+    }
+
+    fun playPreview(soundName: String) {
+        stopPreview()
+        val file = SoundLibrary.soundFile(context, soundName)
+        if (!file.exists()) return
+        val player = try {
+            MediaPlayer().apply {
+                setDataSource(file.absolutePath)
+                setOnCompletionListener { stopPreview() }
+                prepare()
+                start()
+            }
+        } catch (e: Exception) {
+            null
+        }
+        if (player != null) {
+            previewPlayerHolder[0] = player
+            previewingSound = soundName
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { stopPreview() }
+    }
+
+    val importLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null) {
+            val importedName = SoundLibrary.importFrom(context, uri)
+            if (importedName != null) {
+                if (importedName !in soundsList) {
+                    soundsList = (soundsList + importedName).sorted()
+                }
+                selectedSound = importedName
+            }
+        }
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -74,20 +139,30 @@ fun EditButtonDialog(
                 )
 
                 Spacer(Modifier.height(12.dp))
-                Text("Son", style = MaterialTheme.typography.labelLarge)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Son", style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
+                    OutlinedButton(onClick = { importLauncher.launch(arrayOf("audio/*")) }) {
+                        Icon(Icons.Filled.FolderOpen, contentDescription = null)
+                        Spacer(Modifier.width(4.dp))
+                        Text("Parcourir")
+                    }
+                }
 
-                if (availableSounds.isEmpty()) {
+                if (soundsList.isEmpty()) {
                     Text(
-                        "Aucun son trouvé dans app/src/main/assets/sounds",
+                        "Aucun son pour l'instant : touche \"Parcourir\" pour en choisir un sur le téléphone",
                         style = MaterialTheme.typography.bodySmall
                     )
                 } else {
                     Column(
                         modifier = Modifier
-                            .heightIn(max = 160.dp)
+                            .heightIn(max = 200.dp)
                             .verticalScroll(rememberScrollState())
                     ) {
-                        availableSounds.forEach { sound ->
+                        soundsList.forEach { sound ->
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
@@ -98,7 +173,15 @@ fun EditButtonDialog(
                                     selected = selectedSound == sound,
                                     onClick = { selectedSound = sound }
                                 )
-                                Text(sound)
+                                Text(sound, modifier = Modifier.weight(1f))
+                                IconButton(onClick = {
+                                    if (previewingSound == sound) stopPreview() else playPreview(sound)
+                                }) {
+                                    Icon(
+                                        if (previewingSound == sound) Icons.Filled.Stop else Icons.Filled.PlayArrow,
+                                        contentDescription = if (previewingSound == sound) "Arrêter l'écoute" else "Écouter"
+                                    )
+                                }
                             }
                         }
                     }
@@ -135,6 +218,7 @@ fun EditButtonDialog(
         confirmButton = {
             TextButton(
                 onClick = {
+                    stopPreview()
                     onSave(
                         config.copy(
                             name = name,
@@ -152,7 +236,10 @@ fun EditButtonDialog(
         dismissButton = {
             Row {
                 TextButton(onClick = onClear) { Text("Vider") }
-                TextButton(onClick = onDismiss) { Text("Annuler") }
+                TextButton(onClick = {
+                    stopPreview()
+                    onDismiss()
+                }) { Text("Annuler") }
             }
         }
     )
