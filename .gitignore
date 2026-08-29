@@ -15,9 +15,5 @@ captures/
 .DS_Store
 Thumbs.db
 
-# Sons de test / provenance à clarifier (droits non vérifiés) : jamais poussés sur le dépôt.
-# Le README.txt du dossier reste suivi pour documenter son usage.
-app/src/main/assets/sounds/*.wav
-app/src/main/assets/sounds/*.WAV
-app/src/main/assets/sounds/*.mp3
-app/src/main/assets/sounds/*.MP3
+# Dossier personnel de travail (sons, brouillons) : jamais suivi par Git.
+Elements de l'application/

@@ -2,6 +2,7 @@ package com.bruitage.app.audio
 
 import android.content.Context
 import android.media.MediaPlayer
+import com.bruitage.app.data.SoundLibrary
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,7 +22,7 @@ class AudioPlayerManager(private val context: Context) {
 
     fun play(
         buttonIndex: Int,
-        assetFileName: String,
+        soundFileName: String,
         loop: Boolean,
         volume: Float,
         fade: Boolean,
@@ -29,13 +30,14 @@ class AudioPlayerManager(private val context: Context) {
     ) {
         stop(buttonIndex)
 
+        val file = SoundLibrary.soundFile(context, soundFileName)
+        if (!file.exists()) return
+
         val player = try {
-            context.assets.openFd("sounds/$assetFileName").use { afd ->
-                MediaPlayer().apply {
-                    setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
-                    isLooping = loop
-                    prepare()
-                }
+            MediaPlayer().apply {
+                setDataSource(file.absolutePath)
+                isLooping = loop
+                prepare()
             }
         } catch (e: Exception) {
             return
