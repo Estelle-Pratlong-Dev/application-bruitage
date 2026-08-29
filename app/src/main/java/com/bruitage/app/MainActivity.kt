@@ -8,6 +8,11 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.bruitage.app.security.ActivationManager
+import com.bruitage.app.ui.ActivationScreen
 import com.bruitage.app.ui.SoundBoardScreen
 import com.bruitage.app.ui.theme.BruitageTheme
 
@@ -19,6 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val settings by viewModel.settings.collectAsState()
+            var activated by remember { mutableStateOf(ActivationManager.isActivated(this)) }
 
             LaunchedEffect(settings.keepScreenOn, settings.brightness) {
                 if (settings.keepScreenOn) {
@@ -32,7 +38,11 @@ class MainActivity : ComponentActivity() {
             }
 
             BruitageTheme(darkTheme = settings.darkTheme) {
-                SoundBoardScreen(viewModel = viewModel)
+                if (activated) {
+                    SoundBoardScreen(viewModel = viewModel)
+                } else {
+                    ActivationScreen(onActivated = { activated = true })
+                }
             }
         }
     }
