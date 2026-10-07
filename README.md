@@ -4,6 +4,8 @@ Application Android native de gestion de bruitages conçue pour être utilisée 
 
 > 🎵 Projet personnel — application métier
 
+> ⚠️ **Tous droits réservés.** Ce dépôt est public à titre de consultation uniquement : il est **strictement interdit** de copier, reproduire, modifier, redistribuer ou réutiliser tout ou partie de ce projet sans autorisation écrite préalable. Voir la section [Licence](#licence).
+
 ## Le projet
 
 Cette application a été conçue pour disposer d'un **soundboard simple, rapide et entièrement hors ligne** sur tablette Android.
@@ -68,6 +70,23 @@ Cette solution permet de produire les nouvelles versions de l'application sans d
 L'application est destinée à un usage privé et n'est pas distribuée sur le Google Play Store.
 
 L'APK est installé directement sur les tablettes utilisées avec le manège.
+
+## Licence
+
+Copyright © 2026 Estelle Pratlong — **Tous droits réservés.**
+
+Le code source de ce dépôt est visible publiquement uniquement pour consultation (par exemple dans le cadre d'un portfolio). Il n'est **pas** distribué sous licence libre ou open source.
+
+Sans autorisation écrite préalable de l'autrice, il est **strictement interdit** de :
+
+* copier, reproduire ou dupliquer tout ou partie du projet ;
+* le modifier, l'adapter ou en créer des œuvres dérivées ;
+* le distribuer, le publier ou le partager, gratuitement ou non, y compris ses APK ;
+* l'utiliser à des fins commerciales ;
+* contourner le système d'activation par tablette ;
+* réutiliser le nom, l'icône ou l'identité visuelle de l'application.
+
+Le texte complet (français et anglais) se trouve dans le fichier [LICENSE](LICENSE).
 
 ## Développement assisté par IA
 
